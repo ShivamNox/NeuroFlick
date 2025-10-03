@@ -14,340 +14,192 @@
     }
     html, body {
       width: 100%;
-      min-height: 100vh;
-    }
-    body {
-      background: #111;
-      color: #f5f5f5;
+      height: 100%;
       font-family: 'Inter', sans-serif;
-      padding: 0 15px 80px;
+      background-color: #111;
+      color: #eee;
+      overflow: hidden;
+    }
+
+    body {
       display: flex;
       flex-direction: column;
+      padding: 10px;
     }
 
-    /* Header */
-    .app-header {
+    header {
       text-align: center;
-      padding: 30px 0 20px;
+      padding-bottom: 5px;
     }
-    .app-header h1 {
-      font-size: 2rem;
+
+    h1 {
+      font-size: 1.2rem;
       color: #00e5ff;
-      font-weight: 700;
     }
+
     .subtitle {
-      font-size: 1.125rem;
-      color: #00e5ff;
-      margin-top: 0.5rem;
-      font-weight: 600;
-    }
-    .description {
-      font-size: 0.875rem;
-      color: #ccc;
-      max-width: 400px;
-      margin: 0.75rem auto 0;
-      line-height: 1.4;
-    }
-
-    /* Movie Box */
-    #movie-box {
-      background: #1b1b1b;
-      max-width: 600px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 25px;
-      border-radius: 12px;
-      border: 1px solid #333;
-    }
-    #movie-box img {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      background: #222;
-    }
-    .label-value {
       font-size: 0.9rem;
-      margin-bottom: 10px;
-    }
-    .label-value .label {
-      font-weight: 600;
       color: #00e5ff;
-      margin-right: 6px;
-    }
-    .label-value .value {
-      color: #ddd;
-    }
-    .genre-tag {
-      background: #2c2c2c;
-      color: #eee;
-      padding: 4px 8px;
-      margin: 4px 4px 0 0;
-      display: inline-block;
-      border-radius: 10px;
-      font-size: 0.8rem;
+      margin-top: 4px;
     }
 
-    /* Controls */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    #movie-box {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #1b1b1b;
+      border: 1px solid #333;
+      border-radius: 10px;
+      overflow: hidden;
+      max-height: 65vh;
+    }
+
+    /* DESKTOP: Split image and details */
+    @media (min-width: 768px) {
+      #movie-box {
+        flex-direction: row;
+      }
+      .movie-poster {
+        flex: 0 0 40%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .movie-details {
+        padding: 12px;
+        flex: 1;
+        overflow-y: auto;
+      }
+    }
+
+    /* MOBILE: stacked image and details */
+    @media (max-width: 767px) {
+      .movie-poster {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+      }
+      .movie-details {
+        padding: 10px;
+      }
+    }
+
+    .label-value {
+      font-size: 0.8rem;
+      margin-bottom: 6px;
+    }
+    .label {
+      color: #00e5ff;
+      font-weight: 600;
+      margin-right: 5px;
+    }
+
     .controls {
       display: flex;
       justify-content: space-between;
-      gap: 10px;
-      margin: 30px auto;
-      max-width: 600px;
-      width: 100%;
-      padding: 0 10px;
-      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
     }
     .controls button {
-      flex: 1 1 auto;
+      flex: 1;
+      padding: 8px;
+      font-size: 0.75rem;
       background: #00e5ff;
       color: #000;
       border: none;
-      padding: 12px 16px;
-      font-size: 0.875rem;
-      font-weight: 600;
       border-radius: 6px;
       cursor: pointer;
-      min-width: 100px;
-    }
-    .controls button:hover {
-      background: #1de9b6;
     }
 
-    /* Search Container */
     .search-container {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
       display: flex;
-      gap: 8px;
-      padding: 12px;
-      background: #1a1a1a;
-      border-top: 1px solid #333;
-      z-index: 1000;
+      gap: 6px;
+      padding-top: 8px;
     }
-    .search-container select,
-    .search-container input,
-    .search-container button {
-      border: 1px solid #333;
-      border-radius: 6px;
-      font-size: 0.875rem;
-    }
-    #type-filter {
-      padding: 10px;
-      background: #111;
-      color: #fff;
-      flex: 0 0 auto;
-    }
-    #search-input {
-      padding: 10px 12px;
-      background: #111;
-      color: #fff;
-      flex: 1 1 auto;
-    }
+
+    #type-filter,
+    #search-input,
     #search-btn {
-      padding: 10px 14px;
+      font-size: 0.75rem;
+      border: 1px solid #333;
+      border-radius: 5px;
+      padding: 6px;
+    }
+
+    #type-filter {
+      background: #111;
+      color: #fff;
+    }
+
+    #search-input {
+      flex: 1;
+      background: #111;
+      color: #fff;
+    }
+
+    #search-btn {
       background: #00e5ff;
       color: #000;
       border: none;
-      cursor: pointer;
-    }
-    #search-btn:hover {
-      background: #1de9b6;
     }
 
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 2000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.9);
-      overflow: auto;
-    }
-    .modal-content {
-      background: #1e1e1e;
-      margin: 5% auto;
-      padding: 0;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 800px;
-      max-height: 80vh;
-      overflow: hidden;
-      border: 1px solid #333;
-    }
-    .modal-header {
-      padding: 16px;
-      background: #00e5ff;
-      color: #000;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .modal-header h2 {
-      font-size: 1.125rem;
-    }
-    .close {
-      font-size: 1.5rem;
-      font-weight: bold;
-      cursor: pointer;
-      color: #000;
-    }
-    .modal-body {
-      padding: 20px;
-      overflow-y: auto;
-      max-height: 60vh;
-    }
-    .favorite-item {
-      background: #2a2a2a;
-      border-radius: 10px;
-      padding: 12px;
-      display: flex;
-      gap: 12px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    .favorite-poster {
-      width: 80px;
-      height: 120px;
-      border-radius: 8px;
-      background: #444;
-      object-fit: cover;
-      flex: 0 0 auto;
-    }
-    .favorite-info {
-      flex: 1 1 auto;
-    }
-    .favorite-title {
-      color: #00e5ff;
-      font-weight: 600;
-      font-size: 1rem;
-      margin-bottom: 4px;
-    }
-    .favorite-details {
-      font-size: 0.875rem;
-      color: #aaa;
-    }
-    .favorite-overview {
-      font-size: 0.75rem;
-      color: #888;
-      margin-top: 4px;
-    }
-    .remove-favorite {
-      background: #311;
-      color: #f55;
-      border: 1px solid #522;
-      padding: 6px 10px;
-      font-size: 0.75rem;
-      border-radius: 4px;
-      cursor: pointer;
-      flex: 0 0 auto;
-    }
-
-    /* Footer */
     footer {
+      font-size: 0.7rem;
+      color: #666;
       text-align: center;
-      color: #777;
-      font-size: 0.875rem;
-      margin-top: auto;
-      padding: 20px 0;
+      margin-top: 6px;
     }
     footer a {
       color: #00e5ff;
       text-decoration: none;
     }
-    footer a:hover {
-      color: #1de9b6;
-    }
-
-    /* Mobile / small screens */
-    @media (max-width: 600px) {
-      .app-header h1 {
-        font-size: 1.75rem;
-      }
-      .subtitle {
-        font-size: 1rem;
-      }
-      #movie-box {
-        padding: 20px;
-      }
-      .controls {
-        gap: 6px;
-        padding: 0 5px;
-      }
-      .controls button {
-        padding: 10px;
-        font-size: 0.875rem;
-        min-width: 80px;
-      }
-      .modal-content {
-        width: 95%;
-        margin: 10% auto;
-      }
-      .favorite-item {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .favorite-poster {
-        width: 60px;
-        height: 90px;
-      }
-    }
-
   </style>
 </head>
 <body>
-
-  <!-- Enhanced Header -->
-  <header class="app-header">
-    <h1>Movie Suggestion</h1>
-    <p class="subtitle">Discover Amazing Movies & TV Series</p>
+  <header>
+    <h1>Movies/Series Suggestion</h1>
+    <div class="subtitle">Discover Amazing Movies & TV Series</div>
   </header>
 
-  <!-- Favorites Modal -->
-  <div id="favorites-modal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>❤️ Your Favorite Movies & Series</h2>
-        <span class="close">&times;</span>
+  <div class="main-content">
+    <div id="movie-box">
+      <img id="movie-poster" class="movie-poster" src="https://via.placeholder.com/400x600" alt="Poster" />
+      <div class="movie-details">
+        <div class="label-value"><span class="label">Title:</span><span id="movie-title">--</span></div>
+        <div class="label-value"><span class="label">Type:</span><span id="movie-type">--</span></div>
+        <div class="label-value"><span class="label">Rating:</span><span id="movie-rating">--</span></div>
+        <div class="label-value"><span class="label">Release:</span><span id="movie-release">--</span></div>
+        <div class="label-value"><span class="label">Runtime:</span><span id="movie-runtime">--</span></div>
+        <div class="label-value"><span class="label">Genres:</span><span id="movie-genres">--</span></div>
+        <div class="label-value"><span class="label">Story:</span><span id="movie-overview">--</span></div>
       </div>
-      <div class="modal-body">
-        <div id="favorites-list"></div>
-        <div id="no-favorites" style="display: none;">
-          <p style="text-align: center; color: #888; font-size: 16px;">
-            आपने अभी तक कोई movie या series favorite नहीं की है!<br>
-            <small>Movies देखते समय ❤️ button दबाकर favorites में add करें</small>
-          </p>
-        </div>
-      </div>
+    </div>
+
+    <div class="controls">
+      <button id="back-btn-bottom">⬅️ Back</button>
+      <button id="favorite-btn">🤍 Favorite</button>
+      <button id="view-favorites-btn">📋 Favorites</button>
+      <button id="next-btn-bottom">➡️ Next</button>
+    </div>
+
+    <div class="search-container">
+      <select id="type-filter">
+        <option value="">All</option>
+        <option value="movie">Movies</option>
+        <option value="tv">TV</option>
+      </select>
+      <input type="text" id="search-input" placeholder="🔍 Search..." />
+      <button id="search-btn">Search</button>
     </div>
   </div>
 
-  <div id="movie-box">
-    <img id="movie-poster" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQ1MCIgdmlld0JveD0iMCAwIDMwMCA0NTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDUwIiBmaWxsPSIjMmEyYTJhIi8+Cjx0ZXh0IHg9IjE1MCIgeT0iMjI1IiBmaWxsPSIjNjY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE4Ij5Mb2FkaW5nLi4uPC90ZXh0Pgo8L3N2Zz4K" alt="Loading..." />
-    <div class="label-value"><span class="label">Title:</span><span class="value" id="movie-title">Loading amazing content...</span></div>
-    <div class="label-value"><span class="label">Type:</span><span class="value" id="movie-type">--</span></div>
-    <div class="label-value"><span class="label">Rating:</span><span class="value" id="movie-rating">--</span></div>
-    <div class="label-value"><span class="label">Release Date:</span><span class="value" id="movie-release">--</span></div>
-    <div class="label-value"><span class="label">Runtime:</span><span class="value" id="movie-runtime">--</span></div>
-    <div class="label-value"><span class="label">Genres:</span><span class="value" id="movie-genres">--</span></div>
-    <div class="label-value"><span class="label">Story Line:</span><span class="value" id="movie-overview">--</span></div>
-  </div>
-
-  <!-- Enhanced Controls with Favorites -->
-  <div class="controls">
-    <button id="back-btn-bottom">⬅️ Back</button>
-    <button id="favorite-btn">🤍 Favorite</button>
-    <button id="view-favorites-btn">📋 Favorite List</button>
-    <button id="next-btn-bottom">Next ➡️</button>
-  </div>
 
   <footer>
     Made by <a href="https://shivamnox.github.io" target="_blank">ShivamNox</a>
