@@ -522,8 +522,6 @@
     document.getElementById("favorite-btn").addEventListener("click", toggleFavorite);
     document.getElementById("view-favorites-btn").addEventListener("click", showFavoritesModal);
 
-    // Modal event listeners
-    document.querySelector('.close').addEventListener('click', closeFavoritesModal);
     document.getElementById('favorites-modal').addEventListener('click', (e) => {
       if (e.target.id === 'favorites-modal') {
         closeFavoritesModal();
