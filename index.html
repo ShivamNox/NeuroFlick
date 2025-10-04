@@ -183,7 +183,6 @@
       display: flex;
       gap: 10px;
       background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(20px);
       padding: 16px;
       border-radius: 16px;
       border: 1px solid rgba(255, 255, 255, 0.15);
@@ -259,7 +258,6 @@
       text-align: center;
       padding: 16px;
       background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
       border-radius: 12px;
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
@@ -324,6 +322,14 @@
   </style>
 </head>
 <body>
+  <!-- Loading Popup -->
+  <div class="loading-popup" id="loading-popup">
+    <div class="loading-content">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Loading...</div>
+    </div>
+  </div>
+
   <header>
     <h1>Movies/Series Suggestion</h1>
     <div class="subtitle">Discover Amazing Movies & TV Series</div>
@@ -397,12 +403,11 @@
 
     // Loading state
     function showLoading() {
-      document.getElementById("movie-box").classList.add('loading');
-      document.getElementById("movie-title").textContent = "Loading...";
+      document.getElementById("loading-popup").classList.add('show');
     }
 
     function hideLoading() {
-      document.getElementById("movie-box").classList.remove('loading');
+      document.getElementById("loading-popup").classList.remove('show');
     }
 
     // Error handling
