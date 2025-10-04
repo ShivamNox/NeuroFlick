@@ -319,6 +319,54 @@
       margin-left: auto;
       padding: 4px 8px;
     }
+    
+    /* Loading Popup */
+    .loading-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 99999;
+    }
+    
+    .loading-popup.show {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .loading-content {
+      background: rgba(30, 30, 50, 0.95);
+      border: 2px solid rgba(167, 139, 250, 0.5);
+      border-radius: 20px;
+      padding: 40px 60px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+    
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(167, 139, 250, 0.3);
+      border-top: 4px solid #a78bfa;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .loading-text {
+      font-size: 1.2rem;
+      color: #a78bfa;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
