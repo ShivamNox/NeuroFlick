@@ -15,196 +15,335 @@
       width: 100%;
       height: 100%;
       font-family: 'Inter', sans-serif;
-      background-color: #111;
-      color: #eee;
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      color: #f0f0f0;
     }
 
     body {
       display: flex;
       flex-direction: column;
-      padding: 10px;
+      padding: 20px;
+      gap: 16px;
     }
 
     header {
       text-align: center;
-      padding-bottom: 5px;
+      padding: 20px 0;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     h1 {
-      font-size: 1.2rem;
-      color: #00e5ff;
+      font-size: 2rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 700;
+      letter-spacing: -0.5px;
     }
 
     .subtitle {
-      font-size: 0.9rem;
-      color: #00e5ff;
-      margin-top: 4px;
+      font-size: 1rem;
+      color: #b8b8d1;
+      margin-top: 8px;
+      font-weight: 400;
     }
 
     .main-content {
       flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      gap: 8px;
+      gap: 16px;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
     }
 
     #movie-box {
       flex: 1;
       display: flex;
       flex-direction: column;
-      background: #1b1b1b;
-      border: 1px solid #333;
-      border-radius: 10px;
-      max-height: 70vh;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    #movie-box:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
     }
 
     /* DESKTOP: Split image and details */
     @media (min-width: 768px) {
       #movie-box {
         flex-direction: row;
+        min-height: 500px;
       }
       .movie-poster {
-width: 400px; height: auto; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); }
+        width: 350px;
+        height: auto;
+        object-fit: cover;
+        border-radius: 0;
+      }
       .movie-details {
-        padding: 12px;
+        padding: 32px;
         flex: 1;
         overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
       }
     }
 
     /* MOBILE: stacked image and details */
     @media (max-width: 767px) {
-      .movie-poster {
- width: 200px; height: 300; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); }
+      body {
+        padding: 12px;
+        gap: 12px;
       }
+      
+      header {
+        padding: 16px;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      .subtitle {
+        font-size: 0.9rem;
+      }
+      
+      #movie-box {
+        flex-direction: column;
+      }
+      
+      .movie-poster {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 0;
+      }
+      
       .movie-details {
-        padding: 10px;
+        padding: 20px;
+        gap: 12px;
       }
     }
 
     .label-value {
-      font-size: 0.8rem;
-      margin-bottom: 6px;
+      font-size: 0.95rem;
+      line-height: 1.6;
     }
+    
     .label {
-      color: #00e5ff;
+      color: #a78bfa;
       font-weight: 600;
-      margin-right: 5px;
+      margin-right: 8px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .genre-tag {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      margin-right: 6px;
+      margin-top: 4px;
+      font-weight: 500;
     }
 
     .controls {
       display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      margin-top: 8px;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
+    
     .controls button {
       flex: 1;
-      padding: 8px;
-      font-size: 0.75rem;
-      background: #00e5ff;
-      color: #000;
+      min-width: 120px;
+      padding: 14px 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 12px;
       cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .controls button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+    
+    .controls button:active {
+      transform: translateY(0);
     }
 
     .search-container {
       display: flex;
-      gap: 6px;
-      padding-top: 8px;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     #type-filter,
     #search-input,
     #search-btn {
-      font-size: 0.75rem;
-      border: 1px solid #333;
-      border-radius: 5px;
-      padding: 6px;
+      font-size: 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 12px 16px;
+      transition: all 0.3s ease;
     }
 
     #type-filter {
-      background: #111;
+      background: rgba(255, 255, 255, 0.1);
       color: #fff;
+      cursor: pointer;
+      min-width: 100px;
+    }
+    
+    #type-filter:focus {
+      outline: none;
+      border-color: #667eea;
+      background: rgba(255, 255, 255, 0.15);
     }
 
     #search-input {
       flex: 1;
-      background: #111;
+      background: rgba(255, 255, 255, 0.1);
       color: #fff;
+    }
+    
+    #search-input::placeholder {
+      color: #b8b8d1;
+    }
+    
+    #search-input:focus {
+      outline: none;
+      border-color: #667eea;
+      background: rgba(255, 255, 255, 0.15);
     }
 
     #search-btn {
-      background: #00e5ff;
-      color: #000;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
       border: none;
+      cursor: pointer;
+      font-weight: 600;
+      padding: 12px 24px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    #search-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
     }
 
     footer {
-      font-size: 0.7rem;
-      color: #666;
+      font-size: 0.85rem;
+      color: #b8b8d1;
       text-align: center;
-      margin-top: 6px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
+    
     footer a {
-      color: #00e5ff;
+      color: #a78bfa;
       text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
     }
+    
+    footer a:hover {
+      color: #667eea;
+    }
+    
     .favorite-item {
-  display: flex;
-  gap: 10px;
-  background: #2a2a2a;
-  padding: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.favorite-item:hover {
-  background: #333;
-}
+      display: flex;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .favorite-item:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateX(4px);
+    }
 
-.favorite-poster {
-  width: 80px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 4px;
-  flex-shrink: 0;
-}
+    .favorite-poster {
+      width: 80px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
 
-.favorite-info {
-  flex: 1;
-}
+    .favorite-info {
+      flex: 1;
+    }
 
-.favorite-title {
-  font-weight: bold;
-  font-size: 1rem;
-  color: #00e5ff;
-}
+    .favorite-title {
+      font-weight: bold;
+      font-size: 1rem;
+      color: #a78bfa;
+    }
 
-.favorite-details {
-  font-size: 0.8rem;
-  color: #aaa;
-  margin-top: 2px;
-}
+    .favorite-details {
+      font-size: 0.8rem;
+      color: #b8b8d1;
+      margin-top: 4px;
+    }
 
-.favorite-overview {
-  margin-top: 6px;
-  font-size: 0.75rem;
-  color: #ccc;
-}
+    .favorite-overview {
+      margin-top: 8px;
+      font-size: 0.75rem;
+      color: #d1d1e0;
+      line-height: 1.4;
+    }
 
-.remove-favorite {
-  background: none;
-  color: #ff5b5b;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-  align-self: flex-start;
-  margin-left: auto;
-}
-
+    .remove-favorite {
+      background: none;
+      color: #ff6b6b;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      align-self: flex-start;
+      margin-left: auto;
+      padding: 4px 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .remove-favorite:hover {
+      color: #ff5252;
+      transform: scale(1.2);
+    }
   </style>
 </head>
 <body>
@@ -213,20 +352,20 @@ width: 400px; height: auto; border-radius: 12px; margin-bottom: 20px; box-shadow
     <div class="subtitle">Discover Amazing Movies & TV Series</div>
   </header>
 
- <!-- Favorites Modal -->
-<div id="favorites-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto;">
-  <div style="max-width:700px; margin: 40px auto; background:#1c1c1c; padding:20px; border-radius:10px; position:relative;">
-    <button class="close" style="position:absolute; top:10px; right:10px; background:none; border:none; font-size:24px; color:#fff; cursor:pointer;">&times;</button>
-    <h2 style="color:#00e5ff;">❤️ Your Favorite Movies & Series</h2>
-    
-    <div id="no-favorites" style="display:none; color:#999; text-align:center; margin-top:20px;">
-      <p>आपने अभी तक कोई movie या series favorite नहीं की है!<br>
-      <small>Movies देखते समय ❤️ button दबाकर favorites में add करें</small></p>
-    </div>
+  <!-- Favorites Modal -->
+  <div id="favorites-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto;">
+    <div style="max-width:700px; margin: 40px auto; background:rgba(28, 28, 44, 0.95); backdrop-filter: blur(20px); padding:24px; border-radius:20px; position:relative; border: 1px solid rgba(255, 255, 255, 0.1);">
+      <button class="close" style="position:absolute; top:15px; right:15px; background:none; border:none; font-size:28px; color:#fff; cursor:pointer; transition: all 0.3s ease;">&times;</button>
+      <h2 style="color:#a78bfa; font-size: 1.5rem; margin-bottom: 20px;">❤️ Your Favorite Movies & Series</h2>
+      
+      <div id="no-favorites" style="display:none; color:#b8b8d1; text-align:center; margin-top:40px; padding: 20px;">
+        <p style="font-size: 1.1rem; margin-bottom: 10px;">आपने अभी तक कोई movie या series favorite नहीं की है!</p>
+        <small style="color: #999;">Movies देखते समय ❤️ button दबाकर favorites में add करें</small>
+      </div>
 
-    <div id="favorites-list" style="margin-top:20px; display:flex; flex-direction:column; gap:12px;"></div>
+      <div id="favorites-list" style="margin-top:20px; display:flex; flex-direction:column; gap:12px;"></div>
+    </div>
   </div>
-</div>
 
   <div class="main-content">
     <div id="movie-box">
@@ -269,7 +408,15 @@ width: 400px; height: auto; border-radius: 12px; margin-bottom: 20px; box-shadow
     const posterBaseURL = "https://image.tmdb.org/t/p/w500";
     let movieHistory = [];
     let currentIndex = -1;
-    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    let favorites = [];
+
+    // Initialize favorites from memory
+    try {
+      const stored = localStorage.getItem('favorites');
+      if (stored) favorites = JSON.parse(stored);
+    } catch (e) {
+      console.warn('Could not load favorites');
+    }
 
     // Loading state
     function showLoading() {
@@ -304,7 +451,11 @@ width: 400px; height: auto; border-radius: 12px; margin-bottom: 20px; box-shadow
         favorites.push(movie);
       }
       
-      localStorage.setItem('favorites', JSON.stringify(favorites));
+      try {
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+      } catch (e) {
+        console.warn('Could not save favorites');
+      }
       updateFavoriteButton(movie);
     }
 
@@ -335,7 +486,7 @@ width: 400px; height: auto; border-radius: 12px; margin-bottom: 20px; box-shadow
               <div class="favorite-overview">${movie.overview.substring(0, 100)}${movie.overview.length > 100 ? '...' : ''}</div>
             </div>
             <button class="remove-favorite" onclick="event.stopPropagation(); removeFavorite(${index})">
-              🗑️ Remove
+              🗑️
             </button>
           </div>
         `).join('');
@@ -359,10 +510,13 @@ width: 400px; height: auto; border-radius: 12px; margin-bottom: 20px; box-shadow
     function removeFavorite(index) {
       if (confirm('क्या आप इस movie को favorites से remove करना चाहते हैं?')) {
         favorites.splice(index, 1);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        showFavoritesModal(); // Refresh the modal
+        try {
+          localStorage.setItem('favorites', JSON.stringify(favorites));
+        } catch (e) {
+          console.warn('Could not save favorites');
+        }
+        showFavoritesModal();
         
-        // Update current movie's favorite button if it's the same movie
         if (currentIndex >= 0 && movieHistory[currentIndex]) {
           updateFavoriteButton(movieHistory[currentIndex]);
         }
@@ -491,7 +645,6 @@ width: 400px; height: auto; border-radius: 12px; margin-bottom: 20px; box-shadow
           return;
         }
 
-        // Get the most popular result
         const bestResult = allResults.sort((a, b) => b.popularity - a.popularity)[0];
         const type = bestResult.searchType;
 
