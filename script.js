@@ -1,15 +1,34 @@
-  const apiKey = "78327f347adeda6321fad8c1941d607a";
+    const apiKey = "78327f347adeda6321fad8c1941d607a";
     const posterBaseURL = "https://image.tmdb.org/t/p/w500";
     let movieHistory = [];
     let currentIndex = -1;
     let favorites = [];
 
-    // Initialize favorites from memory
-    try {
-      const stored = localStorage.getItem('favorites');
-      if (stored) favorites = JSON.parse(stored);
-    } catch (e) {
-      console.warn('Could not load favorites');
+    // Genre state
+    let currentGenreId = null;
+    let currentGenreType = "movie";
+    let currentPage = 1;
+    let currentGenreName = "";
+
+    // Initialize favorites from memory (in-memory storage)
+    const favoritesStore = {
+      data: [],
+      get: function() {
+        return this.data;
+      },
+      set: function(value) {
+        this.data = value;
+      }
+    };
+
+    favorites = favoritesStore.get();
+
+    // Page Management
+    function showPage(pageId) {
+      document.querySelectorAll('.page-container').forEach(page => {
+        page.classList.remove('active');
+      });
+      document.getElementById(pageId).classList.add('active');
     }
 
     // Loading state
@@ -23,12 +42,8 @@
 
     // Error handling
     function displayError(message) {
-      document.getElementById("movie-box").classList.add('error');
-      document.getElementById("movie-title").textContent = "Error";
-      document.getElementById("movie-overview").textContent = message;
-      setTimeout(() => {
-        document.getElementById("movie-box").classList.remove('error');
-      }, 3000);
+      alert(message);
+      hideLoading();
     }
 
     // Favorites functionality
@@ -44,18 +59,14 @@
         favorites.push(movie);
       }
       
-      try {
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-      } catch (e) {
-        console.warn('Could not save favorites');
-      }
+      favoritesStore.set(favorites);
       updateFavoriteButton(movie);
     }
 
     function updateFavoriteButton(movie) {
       const isFavorite = favorites.some(fav => fav.title === movie.title);
       const btn = document.getElementById('favorite-btn');
-      btn.textContent = isFavorite ? '❤️ Favorited' : '🤍 Favorite';
+      btn.textContent = isFavorite ? '❤️ Favorited' : 'Add in 🤍 Favorite';
     }
 
     // Favorites modal functions
@@ -98,16 +109,13 @@
       currentIndex = movieHistory.length - 1;
       displayMovie(movie);
       closeFavoritesModal();
+      showPage('home-page');
     }
 
     function removeFavorite(index) {
       if (confirm('क्या आप इस movie को favorites से remove करना चाहते हैं?')) {
         favorites.splice(index, 1);
-        try {
-          localStorage.setItem('favorites', JSON.stringify(favorites));
-        } catch (e) {
-          console.warn('Could not save favorites');
-        }
+        favoritesStore.set(favorites);
         showFavoritesModal();
         
         if (currentIndex >= 0 && movieHistory[currentIndex]) {
@@ -132,7 +140,7 @@
     async function fetchRandomContent() {
       showLoading();
       const typeFilter = document.getElementById("type-filter").value;
-      const type = typeFilter || (Math.random() < 0.1 ? "movie" : "tv");
+      const type = typeFilter || (Math.random() < 0.5 ? "movie" : "tv");
       const page = Math.floor(Math.random() * 500) + 1;
 
       try {
@@ -271,6 +279,145 @@
       }
     }
 
+    // Genre functionality
+    async function showGenrePage() {
+      showPage('genre-page');
+      showLoading();
+      
+      try {
+        const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`);
+        const movieGenres = await res.json();
+        const res2 = await fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=en-US`);
+        const tvGenres = await res2.json();
+
+        // Combine and remove duplicates
+        const allGenres = [...movieGenres.genres];
+        tvGenres.genres.forEach(tvGenre => {
+          if (!allGenres.find(g => g.id === tvGenre.id)) {
+            allGenres.push(tvGenre);
+          }
+        });
+
+        const container = document.getElementById("genres-list");
+        container.innerHTML = allGenres.map(g => `
+          <button class="genre-btn" data-id="${g.id}" data-name="${g.name}">${g.name}</button>
+        `).join("");
+
+        container.querySelectorAll(".genre-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-id");
+            const name = btn.getAttribute("data-name");
+            openGenreContent(id, name);
+          });
+        });
+
+        hideLoading();
+      } catch (error) {
+        hideLoading();
+        displayError("Failed to load genres. Please try again.");
+      }
+    }
+
+    async function openGenreContent(genreId, genreName) {
+      currentGenreId = genreId;
+      currentGenreType = "movie";
+      currentGenreName = genreName;
+      currentPage = 1;
+
+      showPage('genre-content-page');
+      document.getElementById("genre-title-heading").textContent = genreName;
+      document.getElementById("genre-subtitle").textContent = `Browse ${genreName} Movies & Series`;
+      document.getElementById("genre-items").innerHTML = '';
+
+      await loadGenreItems();
+    }
+
+    async function loadGenreItems() {
+      showLoading();
+      const container = document.getElementById("genre-items");
+      
+      try {
+        const res = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=${currentGenreId}&page=${currentPage}&sort_by=popularity.desc`);
+        const data = await res.json();
+        const results = data.results;
+
+        const html = await Promise.all(results.map(async (item) => {
+          const title = item.title || item.name || "Unknown";
+          const poster = item.poster_path ? posterBaseURL + item.poster_path : "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjI3MCIgdmlld0JveD0iMCAwIDE4MCAyNzAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMjcwIiBmaWxsPSIjMzMzIi8+Cjx0ZXh0IHg9IjkwIiB5PSIxMzUiIGZpbGw9IiM2NjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMTYiPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4=";
+          const rating = item.vote_average ? item.vote_average.toFixed(1) : "N/A";
+          const overview = item.overview || "No description available";
+          
+          // Translate overview to Hindi
+          const translatedOverview = await translateToHindi(overview.substring(0, 150));
+          
+          return `
+            <div class="item-card" onclick="loadGenreMovie(${item.id}, 'movie')">
+              <img src="${poster}" alt="${title}" />
+              <div class="item-info">
+                <div class="item-title">${title}</div>
+                <div class="item-rating">
+                  <i class="fa fa-star"></i>
+                  <span>${rating}/10</span>
+                </div>
+                <div class="item-overview">${translatedOverview}...</div>
+              </div>
+            </div>
+          `;
+        }));
+
+        if (currentPage === 1) {
+          container.innerHTML = html.join('');
+        } else {
+          container.insertAdjacentHTML("beforeend", html.join(''));
+        }
+
+        const btn = document.getElementById("load-more-btn");
+        if (currentPage < data.total_pages && currentPage < 10) {
+          btn.style.display = "block";
+        } else {
+          btn.style.display = "none";
+        }
+
+        hideLoading();
+      } catch (error) {
+        hideLoading();
+        displayError("Failed to load items. Please try again.");
+      }
+    }
+
+    async function loadGenreMovie(movieId, type) {
+      showLoading();
+      
+      try {
+        const detailsRes = await fetch(`https://api.themoviedb.org/3/${type}/${movieId}?api_key=${apiKey}&language=en-US`);
+        const item = await detailsRes.json();
+
+        const translatedOverview = await translateToHindi(item.overview || "");
+
+        const movie = {
+          type,
+          title: type === "movie" ? (item.title || "N/A") : (item.name || "N/A"),
+          overview: translatedOverview || "N/A",
+          rating: item.vote_average + " / 10",
+          release: type === "movie" ? (item.release_date || "Unknown") : (item.first_air_date || "Unknown"),
+          runtime: type === "movie"
+            ? (item.runtime ? `${item.runtime} mins` : "Unknown")
+            : (item.episode_run_time?.length ? `${item.episode_run_time[0]} mins/ep` : "Unknown"),
+          genres: item.genres.map(g => g.name),
+          poster: item.poster_path ? posterBaseURL + item.poster_path : ""
+        };
+
+        movieHistory.push(movie);
+        currentIndex = movieHistory.length - 1;
+        displayMovie(movie);
+        showPage('home-page');
+        hideLoading();
+      } catch (error) {
+        hideLoading();
+        displayError("Failed to load movie details. Please try again.");
+      }
+    }
+
     // Debounce function
     function debounce(func, delay) {
       let timeout;
@@ -292,8 +439,12 @@
     document.addEventListener('keydown', (e) => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
       
+      const activePage = document.querySelector('.page-container.active').id;
+      if (activePage !== 'home-page') return;
+      
       switch(e.key.toLowerCase()) {
         case 'arrowleft':
+          e.preventDefault();
           previousMovie();
           break;
         case 'arrowright':
@@ -308,6 +459,10 @@
         case 'v':
           e.preventDefault();
           showFavoritesModal();
+          break;
+        case 'g':
+          e.preventDefault();
+          showGenrePage();
           break;
       }
     });
@@ -326,6 +481,7 @@
     document.getElementById("back-btn-bottom").addEventListener("click", previousMovie);
     document.getElementById("favorite-btn").addEventListener("click", toggleFavorite);
     document.getElementById("view-favorites-btn").addEventListener("click", showFavoritesModal);
+    document.getElementById("browse-genres-btn").addEventListener("click", showGenrePage);
 
     document.querySelector('.close').addEventListener('click', closeFavoritesModal);
     document.getElementById('favorites-modal').addEventListener('click', (e) => {
@@ -334,11 +490,25 @@
       }
     });
 
+    document.getElementById("load-more-btn").addEventListener("click", () => {
+      currentPage++;
+      loadGenreItems();
+    });
+
+    document.getElementById("back-to-genres-btn").addEventListener("click", showGenrePage);
+    document.getElementById("back-to-home-btn").addEventListener("click", () => {
+      showPage('home-page');
+    });
+
     // Initialize app
     window.addEventListener("DOMContentLoaded", () => {
       const params = new URLSearchParams(window.location.search);
+      const view = params.get("view");
       const searchQuery = params.get("search");
-      if (searchQuery) {
+      
+      if (view === "genre" || view === "genres") {
+        showGenrePage();
+      } else if (searchQuery) {
         const query = searchQuery.replace(/-/g, " ");
         document.getElementById("search-input").value = query;
         searchContent(query);
