@@ -40,7 +40,7 @@ Follow these simple steps to run the project locally:
 
 ```bash
 # Clone the repository
-git clone https://github.com/ShivamNox/movie-suggestion.git
+git clone https://github.com/ShivamNox/neuroflick.git
 cd movie-suggestion
 
 # Open the index.html file in your browser
