@@ -1,4 +1,4 @@
-    const apiKey = "78327f347adeda6321fad8c1941d607a";
+    const apiKey = "19cc925a8d46c04caebe6afe9d0107e3";
     const posterBaseURL = "https://image.tmdb.org/t/p/w500";
     let movieHistory = [];
     let currentIndex = -1;
